@@ -1,0 +1,81 @@
+
+I   We can send info via 
+    1. query strings
+    2. route params 
+    3. req.body
+
+II Express Router
+===========================================================================================
+[::] I
+1. query strings: key-value pairs, begining with an ? and are connected win an & that we send to the server via the url. 
+    url: something ? key=value & key = value & key = value
+
+    - The values can be read as key-value pairs from req.query object.
+    - If only one value is set for one key, the type of the value is a string, and an array for more than one value per key. 
+   -  Names of query string parameters are case sensitive.  sortby !== sortBy  
+   
+
+- Query Sorting Algorythim: default is sorted by id, but sorting pattern can be manipulated via url
+
+localhost:8000/data?sortby=name 
+localhost:8000/data?sortby=id
+
+    const sortField = req.query.sortby || 'id';
+
+        const data = [data]
+
+    const response = data.sort(
+    (a, b) => (a[sortField] < b[sortField] ? -1 : 1)
+  );
+
+  res.status(200).json(response);
+
+2. route params: a value that is added to the url after a colon. It is added to the .params property of the request object. 
+    method: 'something/:id/:friends'
+    url: somrthing/5/mary
+    console.log(req.params ) ==> {id: "5"}, {friends: "mary"}
+
+    - the value for the route parameter will ALWAYS be a string
+
+3. Request Body: Express takes all info client sends and formats it into a JSON object
+    console.log(req.body) ==> [{client data}]
+    - you must validate data before adding it to the database. 
+    - you must add the line 
+         server.use(express.json()),
+     after the express app has been created, to read the JSON.
+
+Principles of REST - representational State Transfer, a way to organize server-side code 
+    - everything is a resource.
+    - each resource is accessible via a unique URI
+    - Resouces can have multiple representations
+    - Communication is done over a stateless protocol (HTTP)
+    - Management of resources is done with HTTP methods
+
+Rest constraints
+    - client server architecture
+    - stateless 
+    - cascheing 
+    - Uniform interface
+    - Layered Systems
+    - Code on Demand
+
+[::] II 
+Express Router Module: out-of-the-box express middleware. routes are to backend as components are to frontend, you can add as many of them as you want. 
+
+    - in server file:
+
+        const routes = require('./users/userRoutes') // import and define user routes on server
+
+        server.use('/users', routes) // whenever the route begins with  /users, refer to routes. For this reason the url's in routes dont need /users
+
+    - in userRoutes file:
+
+        const express = require('express');
+        const router = express.Router();
+
+         - router.methods( '/url', (req,res) => {}) 
+
+        module.exports = router
+
+
+
