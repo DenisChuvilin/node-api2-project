@@ -26,8 +26,6 @@ router.post('/:id/comments', (req, res) => {
         } else {
           db.insertComment(req.body)
             .then((commentId) => {
-              console.log(commentId);
-
               db.findCommentById(commentId.id).then((comment) => res.status(201).json({ CREATED: comment }));
             })
             .catch((err) => console.log(err.message));
@@ -40,7 +38,7 @@ router.post('/:id/comments', (req, res) => {
 router.get('/', (req, res) => {
   db.find()
     .then((posts) => res.status(200).json(posts))
-    .catch((error) => console.log(error.message));
+    .catch((error) => res.status(500).json({ error: 'There was an error while saving the comment to the database' }));
 });
 
 router.get('/:id', (req, res) => {
